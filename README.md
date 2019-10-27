@@ -1,7 +1,7 @@
 # balancer
 
-## Install && start
-`npm use | npm install | npm start`
+## Install && start with basic conf
+`npm use | npm install | npm start` or `./start.sh`
 
 ### Server for metrics
 `http://${hostname}/metrics`
@@ -18,3 +18,8 @@
 `/api/on` - turns server on
 
 `/api/data` - return random data to user
+
+### Docker info
+
+`docker build -t server .` - build image
+`docker run -d -p 5000:80 -p 8080:8080 server:latest` - start image
