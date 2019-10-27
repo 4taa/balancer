@@ -32,4 +32,4 @@ RUN npm install
 COPY . .
 
 #CMD ['./main', '-port=:80', '-metrics=:8080']
-CMD 'node index.js'
+CMD 'node index.js -p 80 -m 8080'
