@@ -5,4 +5,4 @@ global:
 scrape_configs:
   - job_name: 'core'
     static_configs:
-            - targets: ['localhost:4000']
+            - targets: ['209.97.148.231:4000', '45.55.47.24:4000', '68.183.48.203:4000']
