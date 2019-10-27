@@ -1,6 +1,18 @@
 const express = require('express');
 const morgan = require('morgan');
+const optimist = require('optimist');
 const apiMetrics = require('prometheus-api-metrics');
+
+const args = optimist
+    .alias('h', 'help')
+    .alias('h', '?')
+    .options('p', {
+        describe: 'Main server port'
+    })
+    .options('m', {
+        describe: 'Metrics server port'
+    })
+    .argv;
 
 const appServer = express();
 const appMetric = express();
@@ -46,12 +58,12 @@ appServer.get('/api/data', (req, res) => {
     res.sendStatus(500);
 });
 
-console.log('Server for slow requests started on 4000 port');
-appServer.listen(4000);
+console.log(`Server for slow requests started on ${args.p || 4000} port`);
+appServer.listen(args.port || 4000);
 
 // appMetric.get('/metric', (req, res) => {
 //     res.send('kekkekkek');
 // })
 
-console.log('Server for metrics started on 5000 port');
-appMetric.listen(5000);
+console.log(`Server for metrics started on ${args.m || 5000} port`);
+appMetric.listen(args.metric || 5000);
