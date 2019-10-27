@@ -58,12 +58,12 @@ appServer.get('/api/data', (req, res) => {
     res.sendStatus(500);
 });
 
-console.log(`Server for slow requests started on ${args.p || 4000} port`);
-appServer.listen(args.port || 4000);
+console.log(`Server for slow requests started on ${args.p || 80} port`);
+appServer.listen(args.port || 80);
 
 // appMetric.get('/metric', (req, res) => {
 //     res.send('kekkekkek');
 // })
 
-console.log(`Server for metrics started on ${args.m || 5000} port`);
-appMetric.listen(args.metric || 5000);
+console.log(`Server for metrics started on ${args.m || 8080} port`);
+appMetric.listen(args.metric || 8080);
