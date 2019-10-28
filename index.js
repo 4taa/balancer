@@ -9,7 +9,7 @@ const registry = new client.Registry();
 
 const requestM = new client.Counter({
     name: 'request',
-    'help': 'kek'
+    help: 'kek',
 });
 
 registry.registerMetric(requestM);
