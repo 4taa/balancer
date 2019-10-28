@@ -3,6 +3,16 @@ const morgan = require('morgan');
 const optimist = require('optimist');
 const apiMetrics = require('prometheus-api-metrics');
 
+const client = require('prom-client');
+
+const registry = new client.Registry();
+
+const requestM = new client.Counter({
+    name: 'request',
+});
+
+registry.registerMetric(requestM);
+
 const args = optimist
     .alias('h', 'help')
     .alias('h', '?')
@@ -28,19 +38,23 @@ appServer.get('/api/check', (req, res) => {
 
 appServer.post('/api/off', (req, res) => {
     if (serverStatus) {
+        requestM.labels('200', toString(Date.now), '/api/off');
         serverStatus = false;
         res.sendStatus(200);
         return;
     }
+    requestM.labels('500', toString(Date.now), '/api/off');
     res.sendStatus(500);
 });
 
 appServer.post('/api/on', (req, res) => {
     if (!serverStatus) {
+        requestM.labels('200', toString(Date.now), '/api/on');
         serverStatus = true;
         res.sendStatus(200);
         return;
     }
+    requestM.labels('500', toString(Date.now), '/api/on');
     res.sendStatus(500);
 });
 
@@ -51,10 +65,12 @@ appServer.get('/api/data', (req, res) => {
                 string: 'Request paused for 10 seconds',
                 timstamp: Date.now(),
             }
+            requestM.labels('200', toString(Date.now), '/api/data');
             res.send(JSON.stringify(data));
         }, 10000);
         return;
     }
+    requestM.labels('500', toString(Date.now), '/api/data');
     res.sendStatus(500);
 });
 
