@@ -70,7 +70,7 @@ appServer.get('/api/data', (req, res) => {
             }
             requestM.inc({'req_200': '/api/data'}, 1);
             res.send(JSON.stringify(data));
-        }, 10000);
+        }, 200);
         return;
     }
     requestM.inc({'req_500': '/api/data'}, 1);
