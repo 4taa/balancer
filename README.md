@@ -23,9 +23,3 @@
 
 `docker build -t server .` - build image
 `docker run -d -p 5000:80 -p 8080:8080 server:latest` - start image
-
-irate(response_time[1m])
-irate(requests[1m])
-
-rate(response_time[1m])
-rate(requests[1m])
