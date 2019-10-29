@@ -10,6 +10,7 @@ const registry = new client.Registry();
 const requestM = new client.Counter({
     name: 'request',
     help: 'kek',
+    labelNames: ['req_200', 'req_500'],
 });
 
 registry.registerMetric(requestM);
@@ -34,28 +35,29 @@ appMetric.use(apiMetrics());
 let serverStatus = true;
 
 appServer.get('/api/check', (req, res) => {
+    requestM.inc(serverStatus ? {'req_200': '/api/check'} : {'req_500': '/api/check'}, 1);
     res.sendStatus(serverStatus ? 200 : 500);
 });
 
 appServer.post('/api/off', (req, res) => {
     if (serverStatus) {
-        requestM.labels('200', toString(Date.now), '/api/off');
+        requestM.inc({'req_200': '/api/off'}, 1);
         serverStatus = false;
         res.sendStatus(200);
         return;
     }
-    requestM.labels('500', toString(Date.now), '/api/off');
+    requestM.inc({'req_500': '/api/off'}, 1);
     res.sendStatus(500);
 });
 
 appServer.post('/api/on', (req, res) => {
     if (!serverStatus) {
-        requestM.labels('200', toString(Date.now), '/api/on');
+        requestM.inc({'req_200': '/api/on'}, 1);
         serverStatus = true;
         res.sendStatus(200);
         return;
     }
-    requestM.labels('500', toString(Date.now), '/api/on');
+    requestM.inc({'req_500': '/api/on'}, 1);
     res.sendStatus(500);
 });
 
@@ -66,21 +68,18 @@ appServer.get('/api/data', (req, res) => {
                 string: 'Request paused for 10 seconds',
                 timstamp: Date.now(),
             }
-            requestM.labels('200', toString(Date.now), '/api/data');
+            requestM.inc({'req_200': '/api/data'}, 1);
             res.send(JSON.stringify(data));
         }, 10000);
         return;
     }
-    requestM.labels('500', toString(Date.now), '/api/data');
+    requestM.inc({'req_500': '/api/data'}, 1);
     res.sendStatus(500);
 });
 
 console.log(`Server for slow requests started on ${args.p || 80} port`);
 appServer.listen(args.port || 80);
 
-// appMetric.get('/metric', (req, res) => {
-//     res.send('kekkekkek');
-// })
 
 console.log(`Server for metrics started on ${args.m || 8080} port`);
 appMetric.listen(args.metric || 8080);
