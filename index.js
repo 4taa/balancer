@@ -63,13 +63,6 @@ appServer.post('/api/on', (req, res) => {
     res.sendStatus(500);
 });
 
-const reset = () => {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-        requestM.reset();
-    }, 5000);
-}
-
 appServer.get('/api/data', (req, res) => {
     if (serverStatus) {
         setTimeout(() => {
@@ -79,8 +72,6 @@ appServer.get('/api/data', (req, res) => {
             }
             requestM.inc({'req_200': '/api/data'}, 1);
             res.send(JSON.stringify(data));
-
-            reset();
         }, 200);
         return;
     }
