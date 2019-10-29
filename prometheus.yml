@@ -1,8 +1,16 @@
 global:
-  scrape_interval:     10s
+  scrape_interval:     2s
   evaluation_interval: 10s
 
 scrape_configs:
-  - job_name: 'core'
+  - job_name: 'b1'
     static_configs:
-            - targets: ['209.97.148.231', '45.55.47.24', '68.183.48.203']
+      - targets: ['209.97.148.231']
+      
+  - job_name: 'b2'
+    static_configs:
+      - targets: [''45.55.47.24']
+    
+  - job_name: 'b3'
+    static_configs:
+      - targets: ['68.183.48.203']
