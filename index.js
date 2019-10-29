@@ -51,17 +51,10 @@ appServer.post('/api/off', (req, res) => {
 });
 
 appServer.post('/api/on', (req, res) => {
-    const ok = true;
     if (!serverStatus) {
         requestM.inc({'req_200': '/api/on'}, 1);
         serverStatus = true;
         res.sendStatus(200);
-
-        setTimeout(() => {
-            if (ok) {
-                requestM.reset();
-            }
-        }, 5000);
         return;
     }
     requestM.inc({'req_500': '/api/on'}, 1);
@@ -77,6 +70,10 @@ appServer.get('/api/data', (req, res) => {
             }
             requestM.inc({'req_200': '/api/data'}, 1);
             res.send(JSON.stringify(data));
+
+            setTimeout(() => {
+                requestM.reset();
+            }, 5000);
         }, 200);
         return;
     }
